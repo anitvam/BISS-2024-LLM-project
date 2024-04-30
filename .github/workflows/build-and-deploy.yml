@@ -1,0 +1,31 @@
+name: Build LaTeX and deploy on GitHub Releases
+on:
+  push:
+    tags: '*'
+    branches-ignore:
+      - 'autodelivery**'
+      - 'bump-**'
+      - 'renovate/**'
+    paths-ignore:
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - 'LICENSE'
+      - 'renovate.json'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  success:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Docker images.
+        uses: ScribeMD/docker-cache@0.3.7
+        with:
+          key: docker-${{ runner.os }}-${{ hashFiles('.github/workflows/build-and-deploy.yml') }}
+      - name: Compile and publish
+        uses: DanySK/compile-and-publish-all-latex@2.0.8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
