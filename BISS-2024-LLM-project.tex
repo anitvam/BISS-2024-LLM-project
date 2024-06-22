@@ -41,6 +41,9 @@
 \usepackage{cleveref}
 
 \acrodef{acti}[ACTI]{Automatic Conspiracy Theory Identification}
+\acrodef{llm}[LLM]{Large Language Model}
+
+\newcommand{\meta}[1]{{\color{blue}#1}}
 
 % If the title and author information does not fit in the area allocated, uncomment the following
 %
@@ -86,54 +89,23 @@ Bertinoro International Spring School (BISS) 2024}
   {\bf gianni.tumedei2@unibo.it}
 }
 
-
-
-%baiardi, domini, farabegoli, petrella, tumedei
-
-%\author{
-%  \textbf{First Author\textsuperscript{1}},
-%  \textbf{Second Author\textsuperscript{1,2}},
-%  \textbf{Third T. Author\textsuperscript{1}},
-%  \textbf{Fourth Author\textsuperscript{1}},
-%\\
-%  \textbf{Fifth Author\textsuperscript{1,2}},
-%  \textbf{Sixth Author\textsuperscript{1}},
-%  \textbf{Seventh Author\textsuperscript{1}},
-%  \textbf{Eighth Author \textsuperscript{1,2,3,4}},
-%\\
-%  \textbf{Ninth Author\textsuperscript{1}},
-%  \textbf{Tenth Author\textsuperscript{1}},
-%  \textbf{Eleventh E. Author\textsuperscript{1,2,3,4,5}},
-%  \textbf{Twelfth Author\textsuperscript{1}},
-%\\
-%  \textbf{Thirteenth Author\textsuperscript{3}},
-%  \textbf{Fourteenth F. Author\textsuperscript{2,4}},
-%  \textbf{Fifteenth Author\textsuperscript{1}},
-%  \textbf{Sixteenth Author\textsuperscript{1}},
-%\\
-%  \textbf{Seventeenth S. Author\textsuperscript{4,5}},
-%  \textbf{Eighteenth Author\textsuperscript{3,4}},
-%  \textbf{Nineteenth N. Author\textsuperscript{2,5}},
-%  \textbf{Twentieth Author\textsuperscript{1}}
-%\\
-%\\
-%  \textsuperscript{1}Affiliation 1,
-%  \textsuperscript{2}Affiliation 2,
-%  \textsuperscript{3}Affiliation 3,
-%  \textsuperscript{4}Affiliation 4,
-%  \textsuperscript{5}Affiliation 5
-%\\
-%  \small{
-%    \textbf{Correspondence:} \href{mailto:email@domain}{email@domain}
-%  }
-%}
-
 \begin{document}
+
 \maketitle
+
 \begin{abstract}
-This document is a supplement to the general instructions for *ACL authors. It contains instructions for using the \LaTeX{} style files for ACL conferences.
-The document itself conforms to its own specifications, and is therefore an example of what your manuscript should look like.
-These instructions should be used both for papers submitted for review and for final versions of accepted papers.
+Recently,
+social network platform such as Telegram, 4chain, and Parler do not provide strong moderation policies,
+determining the proliferation of conspiracies theories in many contexts like COVID, war in Ukraine,
+diffusing dangerous ideas generating social harm.
+%
+In this paper we present the training process for fine-tune two \acp{llm} architectures
+for identifying conspiracy theories in posts coming from Telegram.
+%
+We provide details about the two adopted architectures,
+the model configuration and the training process adopted in our experiments.
+%
+\meta{Briefly summarise the finding of the experiments}
 \end{abstract}
 
 \section{Task description}\label{sec:task-description}
