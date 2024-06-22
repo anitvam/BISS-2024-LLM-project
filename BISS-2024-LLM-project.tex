@@ -35,6 +35,13 @@
 %additional package(s)
 \usepackage{graphicx}
 
+\usepackage{acronym}
+\usepackage[inline]{enumitem}
+% MUST BE THE LAST IMPORT
+\usepackage{cleveref}
+
+\acrodef{acti}[ACTI]{Automatic Conspiracy Theory Identification}
+
 % If the title and author information does not fit in the area allocated, uncomment the following
 %
 %\setlength\titlebox{<dim>}
@@ -130,8 +137,33 @@ These instructions should be used both for papers submitted for review and for f
 \end{abstract}
 
 \section{Task description}\label{sec:task-description}
+We opt-in for a comparative study between \emph{Encoder-only} and \emph{Decoder-only} architectures on the same task.
+%
+Specifically we identified the \emph{\ac{acti}}~\footnote{\url{https://russogiuseppe.github.io/ACTI/}} task,
+that aims to individuate conspiracy theories coming from lax moderated policies platform like Telegram, 4chan, and Parler.
+%
+We focused on the \emph{Subtask A} where a system must recognise if a Telegram post is conspiratorial or not.
+%
+A post is defined conspiratorial if:
+\begin{enumerate*}[label=(\roman{*})]
+  \item express the belief that major events are controlled by and/or manipulated by powerful people protecting their interests; or
+  \item interpretation of events meant to contribute to support conspiracy theories.
+\end{enumerate*}
+A sentence is considered conspiratorial even if it shares some claims intended to undermine commonly accepted views on societal issues.
 
 \section{Dataset description}\label{sec:dataset-description}
+The dataset for the \ac{acti}-A training is a CSV file containing three columns:
+\begin{itemize}
+  \item \textbf{id}: represents a unique identifier of the post;
+  \item \textbf{comment\_text}: contains the raw text written in the post; and
+  \item \textbf{conspiratorial}: represents a binary label where 0 indicates the post is not conspiratorial,
+    while 1 indicates a conspiratorial post.
+\end{itemize}
+The whole dataset is split into two separate CSV files: one meant for training process,
+and the second meant for testing purposes.
+%
+Notably,
+the second dataset do not contain the \textbf{conspiratorial} column.
 
 \section{Architecture overview}\label{sec:architecture-overview}
 
@@ -162,11 +194,11 @@ These instructions should be used both for papers submitted for review and for f
 
 \bibliography{bibliography}
 
-\appendix
+% \appendix
 
-\section{Example Appendix}
-\label{sec:appendix}
+% \section{Example Appendix}
+% \label{sec:appendix}
 
-This is an appendix.
+% This is an appendix.
 
 \end{document}
