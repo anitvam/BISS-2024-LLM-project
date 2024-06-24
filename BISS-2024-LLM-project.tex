@@ -80,10 +80,10 @@ Bertinoro International Spring School (BISS) 2024}
   {\bf davide.domini@unibo.it} \\  \And
   Nicolas Farabegoli \\
   University of Bologna \\
-  {\bf nicolas.farabegoli@unibo.it} \\  \AND 
+  {\bf nicolas.farabegoli@unibo.it} \\  \AND
   Alessandro Petrella\\
-  University of Bologna \\ 
-  {\bf alessandro.petrella@unibo.it} \\ \And 
+  University of Bologna \\
+  {\bf alessandro.petrella@unibo.it} \\ \And
   Gianni Tumedei \\
   University of Bologna \\
   {\bf gianni.tumedei2@unibo.it}
@@ -94,49 +94,52 @@ Bertinoro International Spring School (BISS) 2024}
 \maketitle
 
 \begin{abstract}
-Recently,
-social network platform such as Telegram, 4chain, and Parler do not provide strong moderation policies,
-determining the proliferation of conspiracies theories in many contexts like COVID and war in Ukraine,
-diffusing dangerous ideas and generating social harm.
+Several social network platforms - such as Telegram, 4chan, and Parler - do not employ strong moderation
+policies, causing the proliferation of conspiracy theories in many contexts, like COVID-19 or the war
+in Ukraine, and thus diffusing dangerous ideas and generating social harm among their communities.
 %
-In this paper we present the process for fine-tune two \acp{llm} architectures
-on an Italian dataset coming from a EVALITA challenge
-for identifying conspiracy theories in posts coming from Telegram.
+In this paper, we present the process to fine-tune two \acp{llm} architectures
+on an Italian dataset from an EVALITA challenge, that requires identifying
+conspiracy theories in posts coming from Telegram.
 %
-We provide details about the two adopted architectures,
-the model configuration and the training process adopted in our experiments.
+We provide details about the two adopted architectures, the model configuration and the training
+process adopted in our experiments.
 %
 \meta{Briefly summarise the finding of the experiments}
 \end{abstract}
 
 \section{Task description}\label{sec:task-description}
-We opt-in for a comparative study between \emph{Encoder-only} and \emph{Decoder-only} architectures on the same task.
+We conducted a comparative study between \emph{Encoder-based} and \emph{Decoder-only} architectures
+on the same task.
 %
-Specifically we identified the \emph{\ac{acti}}~\footnote{\url{https://russogiuseppe.github.io/ACTI/}} task,
-that aims to individuate conspiracy theories coming from lax moderated policies platform like Telegram, 4chan, and Parler.
+Specifically, we worked on the \emph{\ac{acti}}~\footnote{\url{https://russogiuseppe.github.io/ACTI/}}
+task, that requires identifying conspiracy theories coming from lax moderated policies platforms like
+Telegram, 4chan, and Parler.
 %
-We focused on the \emph{Subtask A} where a system must recognise if a Telegram post is conspiratorial or not.
+We focused on the \emph{Subtask A}, where a system must recognise if a Telegram post is conspiratorial
+or not.
 %
-A post is defined conspiratorial if:
+To be flagged as conspiratorial, a post must:
 \begin{enumerate*}[label=(\roman{*})]
   \item express the belief that major events are controlled by and/or manipulated by powerful people protecting their interests; or
-  \item interpretation of events meant to contribute to support conspiracy theories.
+  \item interpret events in a way that supports conspiracy theories.
 \end{enumerate*}
 A sentence is considered conspiratorial even if it shares some claims intended to undermine commonly accepted views on societal issues.
 
 \section{Dataset description}\label{sec:dataset-description}
-The dataset for the \ac{acti}-A training is a CSV file containing three columns:
+The dataset for \ac{acti}-A is in CSV format and contains three columns:
 \begin{itemize}
-  \item \textbf{id}: represents a unique identifier of the post;
+  \item \textbf{id}: represents a unique identifier for the post;
   \item \textbf{comment\_text}: contains the raw text written in the post; and
-  \item \textbf{conspiratorial}: represents a binary label where 0 indicates the post is not conspiratorial,
-    while 1 indicates a conspiratorial post.
+  \item \textbf{conspiratorial}: represents a binary label where 0 indicates that the post is not conspiratorial,
+    while 1 indicates conspiratorial content.
 \end{itemize}
-The whole dataset is split into two separate CSV files: one meant for training process,
-and the second meant for testing purposes.
+The dataset is split into two separate CSV files: one, meant for the training process, lists
+1842 records, while the other includes 460 posts for testing purposes.
 %
-Notably,
-the second dataset do not contain the \textbf{conspiratorial} column.
+Notably, since the task was part of a challenge, the second dataset does not contain the
+\textbf{conspiratorial} column by default, but the \ac{acti} team was kind enough to provide the
+missing labels upon our request.
 
 \section{Architecture overview}\label{sec:architecture-overview}
 
@@ -154,10 +157,11 @@ the second dataset do not contain the \textbf{conspiratorial} column.
   \centering
   \includegraphics[width=\textwidth]{figures/comment_length_distribution.pdf}
   \caption{
-    Comment length distribution for both the training and test dataset.
+    Comment length distribution for both the training dataset (on the left) and test dataset
+    (on the right).
     %
-    On the upper charts the considered post are the raw ones coming from the original dataset;
-    the lower charts a cleanup preprocessing is applied to the posts.
+    The upper charts refer to the raw content of posts, coming from the original dataset;
+    in the lower charts, our cleanup preprocessing has been applied to the content.
   }
   \label{fig:words-distribution}
 \end{figure*}
