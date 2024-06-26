@@ -233,9 +233,37 @@ preserving the same file structure.
 \end{figure*}
 
 \subsection{Model configuration}\label{sec:model-config}
-tokenizer, parameters, model used \dots @marti    
+%tokenizer, parameters, model used \dots @marti    
+To solve ACTI-A task, we compared performances of two different Transformer-based architectures,
+the first one based on an \emph{Encoder} neural network, and the second one on a \emph{Decoder} neural network. 
 
-\paragraph{Encoder.}
+
+
+
+\subsubsection{Encoder} 
+
+% Each BERT-based classifier takes as input a sequence
+% of tokens, extracted from the pre-processed text. The
+% sequence starts with a classification token [CLS] and is
+% concluded by an end-of-sequence token [SEP] , introduced
+% during the tokenisation process. To classify the input piece
+% of text, we retrieve the contextual embedding computed
+% by the transformer hidden layers in correspondence of the
+% [CLS] input token and use it to feed a linear classifier. The
+% final classification layer outputs the probability distribu-
+% tion of the input piece of text to belong to one of the pos-
+% sible classes. We reported the entire process in Figure 2a.
+% To improve the classification results and take the best
+% from the trained models, we considered also creating an
+% ensemble [9, Chapter 16]. For each task, we aggregated
+% the predictions of the individual models. To aggregate
+% the predictions, we froze the fine-tuned classifiers and
+% learned a separate Logistic Regression classifier on top
+% of the Transformer models. The Logistic Regression
+% classifier takes as input the probability distributions
+% predicted by individual models and compute a new output
+% probability combining the previous. The entire ensemble
+% pipeline is represented in Figure 2b
 
 \paragraph{Decoder.}
 
