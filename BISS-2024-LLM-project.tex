@@ -155,12 +155,67 @@ Provide a minimal description of the neural architecture employed.
 \section{Experimental setup}\label{sec:experimental-setup}
 
 \subsection{Preprocessing}\label{sec:preprocessing}
-Preprocessing is the same for both models, @nicolasfara can describe the process.
+The preprocessing stage is a fundamental part in preparing the dataset for fine-tune a \ac{llm}.
+%
+This process ensures that the data is clean, consistent, and in a format suitable for the next stages.
+%
+The same preprocessing procedure has been applied for both the models taken into account in \Cref{sec:model-config}.
+%
+In the following,
+we report the steps we adopted for the preprocessing stage.
+
+\paragraph{Dataset description}
+As described in \Cref{sec:dataset-description},
+the dataset comes in a CSV and Pandas~\cite{reback2020pandas} was used to build a DataFrame from it,
+and manipulate the data.
+
+Preliminary,
+a data exploration over the dataset is performed to understand the categorical labels' distribution,
+and the posts' length provided in the dataset.
+%
+\Cref{fig:class-frequency} depicts the class distribution for the \emph{training set} (left chart),
+and the \emph{test set} (right chart).
+%
+Notably,
+both the classes for the training and test set are well-balanced,
+requiring no rebalancing countermeasure.
+
+Another aspect we are interested in is the post length distribution,
+since we are limited in the number of token each model can accept.
+%
+\Cref{fig:words-distribution} shows the distribution of the posts' length divided by training and test set.
+%
+The two upper charts provide the distribution on the raw post of both the dataset,
+while the two lower charts describe the distribution after the cleanup step (that we will discuss in the next paragraph).
+%
+As can be observed,
+the majority of the posts are concentrated in the range $0-500$ words,
+meaning that the most of the dataset will not be truncated when input to the model.
+%
+The posts' cleanup process do not significantly impact the length distribution of the posts in the datasets.
+
+\paragraph{Text cleaning}
+To remove noise from the input data,
+we processed the raw posts to remove any irrelevant content for the model's fine-tuning.
+%
+In particular,
+we conducted the following operations:
+\begin{enumerate*}[label=(\roman{*})]
+  \item remove all the extra space;
+  \item remove HTML tags and special characters like \texttt{@};
+  \item remove all the http link; and
+  \item remove all the \texttt{\#} but preserving the text associated to the hashtag.
+\end{enumerate*}
+Then,
+the dataset is updated with the cleaned version of the posts.
+
 
 \begin{figure*}
   \centering
   \includegraphics[width=\textwidth]{figures/class_distribution.pdf}
-  \caption{TBD}
+  \caption{
+    Class distribution between the \emph{training set} and the \emph{test set}.
+  }
   \label{fig:class-frequency}
 \end{figure*}
 
@@ -198,8 +253,6 @@ epoche, learning rate, ... @dom
   \label{fig:decoder-only-cm}
 \end{figure}
 
-
-\nocite{*}
 
 \bibliography{bibliography}
 
