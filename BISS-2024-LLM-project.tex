@@ -141,11 +141,22 @@ Notably, since the task was part of a challenge, the second dataset does not con
 \textbf{conspiratorial} column by default, but the \ac{acti} team was kind enough to provide the
 missing labels upon our request.
 
+@dom can you add something about the problems initially encountered with test-set.
+
 \section{Architecture overview}\label{sec:architecture-overview}
+Provide a minimal description of the neural architecture employed.
+@gtumedei
+
+\subsection{Encoder}
+
+\subsection{Decoder}
+
 
 \section{Experimental setup}\label{sec:experimental-setup}
 
 \subsection{Preprocessing}\label{sec:preprocessing}
+Preprocessing is the same for both models, @nicolasfara can describe the process.
+
 \begin{figure*}
   \centering
   \includegraphics[width=\textwidth]{figures/class_distribution.pdf}
@@ -167,11 +178,18 @@ missing labels upon our request.
 \end{figure*}
 
 \subsection{Model configuration}\label{sec:model-config}
+tokenizer, parameters, model used \dots @marti    
+
+\paragraph{Encoder.}
+
+\paragraph{Decoder.}
+
 
 \subsection{Training process}\label{sec:training-process}
+epoche, learning rate, ... @dom
 
 \section{Result and analysis}\label{sec:results-analysis}
-
+@ale
 \begin{figure}
   \centering
   \includegraphics[width=\columnwidth]{figures/decoder-only-confusion-matrix.pdf}
