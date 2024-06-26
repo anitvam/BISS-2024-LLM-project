@@ -164,13 +164,12 @@ The same preprocessing procedure has been applied for both the models taken into
 In the following,
 we report the steps we adopted for the preprocessing stage.
 
-\paragraph{Dataset description}
-As described in \Cref{sec:dataset-description},
-the dataset comes in a CSV and Pandas~\cite{reback2020pandas} was used to build a DataFrame from it,
-and manipulate the data.
+\paragraph{Dataset exploration}
+We use Pandas~\cite{reback2020pandas} to build a DataFrame from the CSV dataset files,
+for extracting information and data manipulation.
 
 Preliminary,
-a data exploration over the dataset is performed to understand the categorical labels' distribution,
+a dataset exploration is performed to understand the categorical labels' distribution,
 and the posts' length provided in the dataset.
 %
 \Cref{fig:class-frequency} depicts the class distribution for the \emph{training set} (left chart),
@@ -207,7 +206,8 @@ we conducted the following operations:
   \item remove all the \texttt{\#} but preserving the text associated to the hashtag.
 \end{enumerate*}
 Then,
-the dataset is updated with the cleaned version of the posts.
+the dataset is updated with the cleaned version of the posts,
+preserving the same file structure.
 
 
 \begin{figure*}
