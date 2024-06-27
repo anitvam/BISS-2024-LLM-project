@@ -261,40 +261,62 @@ preserving the same file structure.
 \end{figure*}
 
 \subsection{Model configuration}\label{sec:model-config}
-%tokenizer, parameters, model used \dots @marti
 To solve ACTI-A task, we compared performances of two different Transformer-based architectures,
 the first one based on an \emph{Encoder} neural network, and the second one on a \emph{Decoder} neural network.
 
+\paragraph{Encoder} 
 
+We adopted a RoBERTa-based Language Model named \texttt{UmBERTo Commoncrawl Cased}, 
+which is trained on the large italian subcorpus of \texttt{OSCAR project} ~\footnote{\url{https://oscar-project.org/}}.  
+%
+To address the chosen challenge, we added to this model a final layer for classification,
+which returns a value for each class specified, 
+in our case two classes for identifying if a text is conspiratorial or not. 
 
+Before training the model on our task we performed preprocessing, as described in \Cref{sec:preprocessing},
+and then tokenization (\Cref{fig:preprocessing-and-tokenization-encoder}).
+%
+Concerning tokenization, \texttt{CamembertTokenizerFast} is adopted, 
+it normalizes strings input both regarding delimeters of the text, 
+but also adds a left-side padding where the input is smaller than the maximum sequence length,
+that we fixed at $ 256 $ characters.
+%
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{figures/encoder.pdf}
+  \caption{
+    Input manipulation before passing it to the encoder LLM model. 
+    The image exemplifies the manipulation output obtained after the cleanup process and the application of the tokenization function.
+  }
+  \label{fig:preprocessing-and-tokenization-encoder}
+\end{figure}
 
-\subsubsection{Encoder}
+\paragraph{Decoder} 
 
-% Each BERT-based classifier takes as input a sequence
-% of tokens, extracted from the pre-processed text. The
-% sequence starts with a classification token [CLS] and is
-% concluded by an end-of-sequence token [SEP] , introduced
-% during the tokenisation process. To classify the input piece
-% of text, we retrieve the contextual embedding computed
-% by the transformer hidden layers in correspondence of the
-% [CLS] input token and use it to feed a linear classifier. The
-% final classification layer outputs the probability distribu-
-% tion of the input piece of text to belong to one of the pos-
-% sible classes. We reported the entire process in Figure 2a.
-% To improve the classification results and take the best
-% from the trained models, we considered also creating an
-% ensemble [9, Chapter 16]. For each task, we aggregated
-% the predictions of the individual models. To aggregate
-% the predictions, we froze the fine-tuned classifiers and
-% learned a separate Logistic Regression classifier on top
-% of the Transformer models. The Logistic Regression
-% classifier takes as input the probability distributions
-% predicted by individual models and compute a new output
-% probability combining the previous. The entire ensemble
-% pipeline is represented in Figure 2b
-
-\paragraph{Decoder.}
-
+The decoder model adopted to be fine-tuned is a small \texttt{OpenAI GPT2} model adapted to italian language~\cite{de-vries-nissim-2021-good}.
+%
+Similarly to the encoder configuration, 
+text is preprocessed and then tokenized before being served to the model.
+%
+The model then returns a value for the attribution of a piece of text to be conspirational or not.
+%
+Oppositely from the encoder, 
+text tokenization is performed using \texttt{GPT2Tokenizer} 
+and configured to add the padding on the left side of the text (\Cref{preprocessing-and-tokenization-decoder}).
+%
+This is made because, given the architecture of a decoder model, 
+the last token of the input sequence is used to make predictions about the next token that should follow the input,
+this means that the last token of the input sequence contains all the information needed in the prediction.
+%
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{figures/decoder.pdf}
+  \caption{
+    Input manipulation before passing it to the decoder LLM model. 
+    The image exemplifies the manipulation output obtained after the cleanup process and the application of the tokenization function.
+  }
+  \label{fig:preprocessing-and-tokenization-decoder}
+\end{figure}
 
 \subsection{Training process}\label{sec:training-process}
 epoche, learning rate, ... @dom
