@@ -291,7 +291,32 @@ that we fixed at $ 256 $ characters.
   \label{fig:preprocessing-and-tokenization-encoder}
 \end{figure}
 
-\paragraph{Decoder} 
+\paragraph{Encoder}
+
+% Each BERT-based classifier takes as input a sequence
+% of tokens, extracted from the pre-processed text. The
+% sequence starts with a classification token [CLS] and is
+% concluded by an end-of-sequence token [SEP] , introduced
+% during the tokenisation process. To classify the input piece
+% of text, we retrieve the contextual embedding computed
+% by the transformer hidden layers in correspondence of the
+% [CLS] input token and use it to feed a linear classifier. The
+% final classification layer outputs the probability distribu-
+% tion of the input piece of text to belong to one of the pos-
+% sible classes. We reported the entire process in Figure 2a.
+% To improve the classification results and take the best
+% from the trained models, we considered also creating an
+% ensemble [9, Chapter 16]. For each task, we aggregated
+% the predictions of the individual models. To aggregate
+% the predictions, we froze the fine-tuned classifiers and
+% learned a separate Logistic Regression classifier on top
+% of the Transformer models. The Logistic Regression
+% classifier takes as input the probability distributions
+% predicted by individual models and compute a new output
+% probability combining the previous. The entire ensemble
+% pipeline is represented in Figure 2b
+
+\paragraph{Decoder}
 
 The decoder model adopted to be fine-tuned is a small \texttt{OpenAI GPT2} model adapted to italian language~\cite{de-vries-nissim-2021-good}.
 %
@@ -319,7 +344,18 @@ this means that the last token of the input sequence contains all the informatio
 \end{figure}
 
 \subsection{Training process}\label{sec:training-process}
-epoche, learning rate, ... @dom
+During the training phase, we focused on fine-tuning two distinct models: one was encoder-only and the 
+  other was decoder-only (as described in~\Cref{sec:model-config}). 
+  We leveraged the libraries PyTorch and HuggingFace for this process. 
+  To maintain consistency, we applied the same hyperparameters to both models, which included:
+  \begin{enumerate*}[label=(\roman{*})]
+    \item $4$ epochs of fine-tuning;
+    \item a maximum sequence length of $256$; and
+    \item a batch size of $16$,
+  \end{enumerate*}
+  The only variation was in the learning rate, where we used $2 \cdot 10^{-5}$ for the encoder and $5 \cdot 10^{-5}$ for the decoder.
+  Finally, we used the cross-entropy loss. 
+
 
 \section{Result and analysis}\label{sec:results-analysis}
 @ale
