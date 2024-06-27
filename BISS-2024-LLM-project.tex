@@ -109,7 +109,7 @@ process adopted in our experiments.
 \end{abstract}
 
 \section{Task description}\label{sec:task-description}
-We conducted a comparative study between \emph{Encoder-based} and \emph{Decoder-only} architectures
+We conducted a comparative study between \emph{Encoder-based} and \emph{Decoder-based} architectures
 on the same task.
 %
 Specifically, we worked on the \emph{\ac{acti}}~\footnote{\url{https://russogiuseppe.github.io/ACTI/}}
@@ -138,47 +138,48 @@ The dataset is split into two separate CSV files: one, meant for the training pr
 1842 records, while the other includes 460 posts for testing purposes.
 %
 Notably, since the task was part of a challenge, the second dataset does not contain the
-\textbf{conspiratorial} column by default. 
+\textbf{conspiratorial} column by default.
 %
-Therefore, the test set was initially labelled by computing the encoding of each sentence using an auxiliary LLM, 
+Therefore, the test set was initially labelled by computing the encoding of each sentence using an auxiliary LLM,
 and subsequently, a clustering algorithm was employed in the latent space.
 %
-However, after an analysis, we noticed that several sentences had been mislabeled. 
+However, after an analysis, we noticed that several sentences had been mislabeled.
 %
 Fortunately, the \ac{acti} team was kind enough to provide the
 missing labels upon our request.
 
 \section{Architecture overview}\label{sec:architecture-overview}
 To tackle the \ac{acti}-A subtask, we explored two alternative architectures: an encoder-based one, and
-a decoder-only one. Both are detailed in this section.
+a decoder-based one. Both are detailed in this section.
 
-\subsection{Encoder-based}
-For the encoder-based architecture, we tried out some variants of BERT \cite{devlin-etal-2019-bert}, pre-trained on different
-datasets.
+\subsection{Encoder}
+Encoder-based classifiers, among which BERT \cite{devlin-etal-2019-bert} is the most famous one, require the
+pre-processed input text to undergo a tokenization process, where each sequence of tokens gets also prepended
+with a \texttt{[CLS]} token, left-padded up to the maximum sequence length, or truncated down to it if longer.
+For tasks that require splitting the input in multiple parts, an additional \texttt{[SEP]} token can be used.
 
-BERT-based classifiers require the pre-processed input text to undergo a tokenization process, where each
-sequence of tokens gets also prepended with a \texttt{[CLS]} token, left-padded up to the maximum sequence
-length, or truncated down to it if longer.
+Processed by the hidden encoding layers, each applying self-attention and passing the result to a feed-forward
+neural network, input tokens are transformed into contextual embeddings. Notably, we are only interested in
+the final hidden state corresponding to the \texttt{[CLS]} token, that contains an aggregate representation of
+the entire input sequence, and can be fed to a linear classifier to obtain the probability distribution of the
+input belonging to one of the classes.
 
-Passing through BERT's hidden encoding layers, which apply self-attention, tokens are transformed into
-contextual embeddings. Notably, we are only interested in the final hidden state corresponding to the
-\texttt{[CLS]} token, that contains an aggregate representation of the entire input sequence, and can be
-fed to a linear classifier to obtain the probability distribution of the input belonging to one of the
-classes (two, in our case). This solution is represented in \meta{TODO Cref figure}.
-
-\subsection{Decoder-only}
-We opted for OpenAI GPT-2 \cite{radford2019language} for our decoder-only architecture, testing some variants of the base
-model that were specifically tuned for italian corpus.
+\subsection{Decoder}
+The decoder-based architecture we adopted is very similar to the encoder one, employing a tokenizer, followed
+by the decoder model, with a classification layer on top.
 
 For the tokenization process, the main differences when compared to the encoder solution are the inverted
 padding direction and the absence of the \texttt{[CLS]} token. In fact, due to the auto-regressive nature
-of decoder-only models, we use the last token to make the prediction with GPT-2, instead of the first
-(\texttt{[CLS]} in BERT).
+of decoder-only models, the last token is used to make the prediction, instead of the first.
 
-With GPT-2, the input passes through multiple decoder blocks, each composed by a masked self-attention layer
-and a feed-forward neural network. Finally, for sequence classification, a linear layer is added on top of
-GPT-2's decoders, with its output dimension equal to the number of labels (two, in our case). An overview
-of the whole process is shown in \meta{TODO Cref figure}.
+The input passes through multiple decoder blocks, each composed by a masked self-attention layer and a
+feed-forward neural network. The masking makes it so each token only attends to previous tokens in the
+sequence, maintaining a unidirectional context. The final hidden state, corresponding to the last token in the
+sequence, is fed to the linear layer on top of the stack of decoders. Its output dimension is equal to the number
+of labels of the given task.
+%
+Alternatively, and less commonly, a special token's embedding or an aggregation of all token embeddings can be
+used as input for the classifier.
 
 \section{Experimental setup}\label{sec:experimental-setup}
 
@@ -264,20 +265,20 @@ preserving the same file structure.
 To solve ACTI-A task, we compared performances of two different Transformer-based architectures,
 the first one based on an \emph{Encoder} neural network, and the second one on a \emph{Decoder} neural network.
 
-\paragraph{Encoder} 
+\paragraph{Encoder}
 
-We adopted a RoBERTa-based Language Model named \texttt{UmBERTo Commoncrawl Cased}, 
-which is trained on the large italian subcorpus of \texttt{OSCAR project} ~\footnote{\url{https://oscar-project.org/}}.  
+We adopted a RoBERTa-based Language Model named \texttt{UmBERTo Commoncrawl Cased},
+which is trained on the large italian subcorpus of \texttt{OSCAR project} ~\footnote{\url{https://oscar-project.org/}}.
 %
 To address the chosen challenge, we added to this model a final layer for classification,
-which returns a value for each class specified, 
-in our case two classes for identifying if a text is conspiratorial or not. 
+which returns a value for each class specified,
+in our case two classes for identifying if a text is conspiratorial or not.
 
 Before training the model on our task we performed preprocessing, as described in \Cref{sec:preprocessing},
 and then tokenization (\Cref{fig:preprocessing-and-tokenization-encoder}).
 %
-Concerning tokenization, \texttt{CamembertTokenizerFast} is adopted, 
-it normalizes strings input both regarding delimeters of the text, 
+Concerning tokenization, \texttt{CamembertTokenizerFast} is adopted,
+it normalizes strings input both regarding delimeters of the text,
 but also adds a left-side padding where the input is smaller than the maximum sequence length,
 that we fixed at $ 256 $ characters.
 %
@@ -285,7 +286,7 @@ that we fixed at $ 256 $ characters.
   \centering
   \includegraphics[width=\linewidth]{figures/encoder.pdf}
   \caption{
-    Input manipulation before passing it to the encoder LLM model. 
+    Input manipulation before passing it to the encoder LLM model.
     The image exemplifies the manipulation output obtained after the cleanup process and the application of the tokenization function.
   }
   \label{fig:preprocessing-and-tokenization-encoder}
@@ -318,16 +319,16 @@ that we fixed at $ 256 $ characters.
 
 The decoder model adopted to be fine-tuned is a small \texttt{OpenAI GPT2} model adapted to italian language~\cite{de-vries-nissim-2021-good}.
 %
-Similarly to the encoder configuration, 
+Similarly to the encoder configuration,
 text is preprocessed and then tokenized before being served to the model.
 %
 The model then returns a value for the attribution of a piece of text to be conspirational or not.
 %
-Oppositely from the encoder, 
-text tokenization is performed using \texttt{GPT2Tokenizer} 
-and configured to add the padding on the left side of the text (\Cref{preprocessing-and-tokenization-decoder}).
+Oppositely from the encoder,
+text tokenization is performed using \texttt{GPT2Tokenizer}
+and configured to add the padding on the left side of the text (\Cref{fig:preprocessing-and-tokenization-decoder}).
 %
-This is made because, given the architecture of a decoder model, 
+This is made because, given the architecture of a decoder model,
 the last token of the input sequence is used to make predictions about the next token that should follow the input,
 this means that the last token of the input sequence contains all the information needed in the prediction.
 %
@@ -335,16 +336,16 @@ this means that the last token of the input sequence contains all the informatio
   \centering
   \includegraphics[width=\linewidth]{figures/decoder.pdf}
   \caption{
-    Input manipulation before passing it to the decoder LLM model. 
+    Input manipulation before passing it to the decoder LLM model.
     The image exemplifies the manipulation output obtained after the cleanup process and the application of the tokenization function.
   }
   \label{fig:preprocessing-and-tokenization-decoder}
 \end{figure}
 
 \subsection{Training process}\label{sec:training-process}
-During the training phase, we focused on fine-tuning two distinct models: one was encoder-only and the 
-  other was decoder-only (as described in~\Cref{sec:model-config}). 
-  We leveraged the libraries PyTorch and HuggingFace for this process. 
+During the training phase, we focused on fine-tuning two distinct models: one was encoder-only and the
+  other was decoder-only (as described in~\Cref{sec:model-config}).
+  We leveraged the libraries PyTorch and HuggingFace for this process.
   To maintain consistency, we applied the same hyperparameters to both models, which included:
   \begin{enumerate*}[label=(\roman{*})]
     \item $4$ epochs of fine-tuning;
@@ -352,7 +353,7 @@ During the training phase, we focused on fine-tuning two distinct models: one wa
     \item a batch size of $16$,
   \end{enumerate*}
   The only variation was in the learning rate, where we used $2 \cdot 10^{-5}$ for the encoder and $5 \cdot 10^{-5}$ for the decoder.
-  Finally, we used the cross-entropy loss. 
+  Finally, we used the cross-entropy loss.
 
 
 \section{Result and analysis}\label{sec:results-analysis}
