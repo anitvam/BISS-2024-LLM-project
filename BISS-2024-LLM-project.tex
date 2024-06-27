@@ -127,21 +127,26 @@ To be flagged as conspiratorial, a post must:
 A sentence is considered conspiratorial even if it shares some claims intended to undermine commonly accepted views on societal issues.
 
 \section{Dataset description}\label{sec:dataset-description}
-The dataset for \ac{acti}-A is in CSV format and contains three columns:
-\begin{itemize}
+The dataset for \ac{acti}-A is in CSV format and contains three columns, namely:
+\begin{enumerate*}[label=(\roman*)]
   \item \textbf{id}: represents a unique identifier for the post;
   \item \textbf{comment\_text}: contains the raw text written in the post; and
   \item \textbf{conspiratorial}: represents a binary label where 0 indicates that the post is not conspiratorial,
     while 1 indicates conspiratorial content.
-\end{itemize}
+\end{enumerate}
 The dataset is split into two separate CSV files: one, meant for the training process, lists
 1842 records, while the other includes 460 posts for testing purposes.
 %
 Notably, since the task was part of a challenge, the second dataset does not contain the
-\textbf{conspiratorial} column by default, but the \ac{acti} team was kind enough to provide the
+\textbf{conspiratorial} column by default. 
+%
+Therefore, the test set was initially labelled by computing the encoding of each sentence using an auxiliary LLM, 
+and subsequently, a clustering algorithm was employed in the latent space.
+%
+However, after an analysis, we noticed that several sentences had been mislabeled. 
+%
+Fortunately, the \ac{acti} team was kind enough to provide the
 missing labels upon our request.
-
-@dom can you add something about the problems initially encountered with test-set.
 
 \section{Architecture overview}\label{sec:architecture-overview}
 To tackle the \ac{acti}-A subtask, we explored two alternative architectures: an encoder-based one, and
@@ -302,6 +307,14 @@ epoche, learning rate, ... @dom
   \caption{
    TBA}
   \label{fig:decoder-only-cm}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{figures/encoder-only-confusion-matrix.pdf}
+  \caption{
+   TBA}
+  \label{fig:encoder-only-cm}
 \end{figure}
 
 
