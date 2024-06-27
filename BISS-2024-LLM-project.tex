@@ -144,13 +144,36 @@ missing labels upon our request.
 @dom can you add something about the problems initially encountered with test-set.
 
 \section{Architecture overview}\label{sec:architecture-overview}
-Provide a minimal description of the neural architecture employed.
-@gtumedei
+To tackle the \ac{acti}-A subtask, we explored two alternative architectures: an encoder-based one, and
+a decoder-only one. Both are detailed in this section.
 
-\subsection{Encoder}
+\subsection{Encoder-based}
+For the encoder-based architecture, we tried out some variants of BERT \cite{devlin-etal-2019-bert}, pre-trained on different
+datasets.
 
-\subsection{Decoder}
+BERT-based classifiers require the pre-processed input text to undergo a tokenization process, where each
+sequence of tokens gets also prepended with a \texttt{[CLS]} token, left-padded up to the maximum sequence
+length, or truncated down to it if longer.
 
+Passing through BERT's hidden encoding layers, which apply self-attention, tokens are transformed into
+contextual embeddings. Notably, we are only interested in the final hidden state corresponding to the
+\texttt{[CLS]} token, that contains an aggregate representation of the entire input sequence, and can be
+fed to a linear classifier to obtain the probability distribution of the input belonging to one of the
+classes (two, in our case). This solution is represented in \meta{TODO Cref figure}.
+
+\subsection{Decoder-only}
+We opted for OpenAI GPT-2 \cite{radford2019language} for our decoder-only architecture, testing some variants of the base
+model that were specifically tuned for italian corpus.
+
+For the tokenization process, the main differences when compared to the encoder solution are the inverted
+padding direction and the absence of the \texttt{[CLS]} token. In fact, due to the auto-regressive nature
+of decoder-only models, we use the last token to make the prediction with GPT-2, instead of the first
+(\texttt{[CLS]} in BERT).
+
+With GPT-2, the input passes through multiple decoder blocks, each composed by a masked self-attention layer
+and a feed-forward neural network. Finally, for sequence classification, a linear layer is added on top of
+GPT-2's decoders, with its output dimension equal to the number of labels (two, in our case). An overview
+of the whole process is shown in \meta{TODO Cref figure}.
 
 \section{Experimental setup}\label{sec:experimental-setup}
 
@@ -233,14 +256,14 @@ preserving the same file structure.
 \end{figure*}
 
 \subsection{Model configuration}\label{sec:model-config}
-%tokenizer, parameters, model used \dots @marti    
+%tokenizer, parameters, model used \dots @marti
 To solve ACTI-A task, we compared performances of two different Transformer-based architectures,
-the first one based on an \emph{Encoder} neural network, and the second one on a \emph{Decoder} neural network. 
+the first one based on an \emph{Encoder} neural network, and the second one on a \emph{Decoder} neural network.
 
 
 
 
-\subsubsection{Encoder} 
+\subsubsection{Encoder}
 
 % Each BERT-based classifier takes as input a sequence
 % of tokens, extracted from the pre-processed text. The
