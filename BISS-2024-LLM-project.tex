@@ -111,6 +111,8 @@ process adopted in our experiments.
 %\meta{Briefly summarise the finding of the experiments}
 Results show that our proposed models outperform both the baseline provided by the organizers on kaggle and 
 the results of the same models without fine-tuning.
+
+\meta{ACTI-A task / ACTI task / subtask}
 \end{abstract}
 
 \section{Task description}\label{sec:task-description}
@@ -142,7 +144,7 @@ The dataset for \ac{acti}-A is in CSV format and contains three columns, namely:
 The dataset is split into two separate CSV files: one, meant for the training process, lists
 1842 records, while the other includes 460 posts for testing purposes.
 %
-Notably, since the task was part of a challenge, the second dataset does not contain the
+Notably, since the task was part of a challenge, the second dataset did not contain the
 \textbf{conspiratorial} column by default.
 %
 Therefore, the test set was initially labelled by computing the encoding of each sentence using an auxiliary LLM,
@@ -152,6 +154,11 @@ However, after an analysis, we noticed that several sentences had been mislabele
 %
 Fortunately, the \ac{acti} team was kind enough to provide the
 missing labels upon our request.
+
+\section{Related Work}\label{sec:related-work}
+
+\meta{citare gli altri lavori che sono stati fatti per il task ACTI-A}\cite{russo2023actievalita2023overview} 
+\footnote{\url{https://ceur-ws.org/Vol-3473/}}
 
 \section{Architecture overview}\label{sec:architecture-overview}
 To tackle the \ac{acti}-A subtask, we explored two alternative architectures: an encoder-based one, and
@@ -182,8 +189,8 @@ input belonging to one of the classes.
 The decoder-based architecture we adopted is very similar to the encoder one, employing a tokenizer, followed
 by the decoder model, with a classification layer on top.
 
-For the tokenization process, the main differences when compared to the encoder solution are the inverted
-padding direction and the absence of the \texttt{[CLS]} token. In fact, due to the auto-regressive nature
+For the tokenization process, the main difference when compared to the encoder solution is the absence of the \texttt{[CLS]} token. 
+In fact, due to the auto-regressive nature
 of decoder-only models, the last token is used to make the prediction, instead of the first.
 
 \Cref{fig:decoder-block} shows the input passing through multiple decoder blocks, each composed by a masked 
@@ -206,7 +213,7 @@ used as input for the classifier.
 \section{Experimental setup}\label{sec:experimental-setup}
 
 \subsection{Preprocessing}\label{sec:preprocessing}
-The preprocessing stage is a fundamental part in preparing the dataset for fine-tune a \ac{llm}.
+The preprocessing stage is a fundamental part in preparing the dataset for fine-tuning a \ac{llm}.
 %
 This process ensures that the data is clean, consistent, and in a format suitable for the next stages.
 %
@@ -216,7 +223,7 @@ In the following,
 we report the steps we adopted for the preprocessing stage.
 
 \paragraph{Dataset exploration}
-We use Pandas~\cite{reback2020pandas} to build a DataFrame from the CSV dataset files,
+We used Pandas~\cite{reback2020pandas} to build a DataFrame from the CSV dataset files,
 for extracting information and data manipulation.
 
 Preliminary,
@@ -253,7 +260,7 @@ we conducted the following operations:
 \begin{enumerate*}[label=(\roman{*})]
   \item remove all the extra space;
   \item remove HTML tags and special characters like \texttt{@};
-  \item remove all the http link; and
+  \item remove all the http links; and
   \item remove all the \texttt{\#} but preserving the text associated to the hashtag.
 \end{enumerate*}
 Then,
@@ -284,7 +291,7 @@ preserving the same file structure.
 \end{figure*}
 
 \subsection{Model configuration}\label{sec:model-config}
-To solve ACTI-A task, we compared performances of two different Transformer-based architectures,
+While solving ACTI-A subtask, we also compared performances of two different Transformer-based architectures,
 the first one based on an \emph{Encoder} neural network, and the second one on a \emph{Decoder} neural network.
 
 \paragraph{Encoder}
@@ -294,7 +301,7 @@ which is trained on the large italian subcorpus of \texttt{OSCAR project} ~\foot
 %
 To address the chosen challenge, we added to this model a final layer for classification,
 which returns a value for each class specified,
-in our case two classes for identifying if a text is conspiratorial or not.
+in our case two classes, for identifying if a text is conspiratorial or not.
 
 Before training the model on our task we performed preprocessing, as described in \Cref{sec:preprocessing},
 and then tokenization (\Cref{fig:preprocessing-and-tokenization-encoder}).
@@ -314,29 +321,6 @@ that we fixed at $ 256 $ characters.
   \label{fig:preprocessing-and-tokenization-encoder}
 \end{figure}
 
-% Each BERT-based classifier takes as input a sequence
-% of tokens, extracted from the pre-processed text. The
-% sequence starts with a classification token [CLS] and is
-% concluded by an end-of-sequence token [SEP] , introduced
-% during the tokenisation process. To classify the input piece
-% of text, we retrieve the contextual embedding computed
-% by the transformer hidden layers in correspondence of the
-% [CLS] input token and use it to feed a linear classifier. The
-% final classification layer outputs the probability distribu-
-% tion of the input piece of text to belong to one of the pos-
-% sible classes. We reported the entire process in Figure 2a.
-% To improve the classification results and take the best
-% from the trained models, we considered also creating an
-% ensemble [9, Chapter 16]. For each task, we aggregated
-% the predictions of the individual models. To aggregate
-% the predictions, we froze the fine-tuned classifiers and
-% learned a separate Logistic Regression classifier on top
-% of the Transformer models. The Logistic Regression
-% classifier takes as input the probability distributions
-% predicted by individual models and compute a new output
-% probability combining the previous. The entire ensemble
-% pipeline is represented in Figure 2b
-
 \paragraph{Decoder}
 
 The decoder model adopted to be fine-tuned is a small \texttt{OpenAI GPT2} model adapted to italian language~\cite{de-vries-nissim-2021-good}.
@@ -344,11 +328,9 @@ The decoder model adopted to be fine-tuned is a small \texttt{OpenAI GPT2} model
 Similarly to the encoder configuration,
 text is preprocessed and then tokenized before being served to the model.
 %
-The model then returns a value for the attribution of a piece of text to be conspirational or not.
-%
 Oppositely from the encoder,
 text tokenization is performed using \texttt{GPT2Tokenizer}
-and configured to add the padding on the left side of the text (\Cref{fig:preprocessing-and-tokenization-decoder}).
+and configured to add the padding on the right side of the text input (\Cref{fig:preprocessing-and-tokenization-decoder}).
 %
 This is made because, given the architecture of a decoder model,
 the last token of the input sequence is used to make predictions about the next token that should follow the input,
@@ -372,8 +354,9 @@ During the training phase, we focused on fine-tuning two distinct models: one wa
   \begin{enumerate*}[label=(\roman{*})]
     \item $4$ epochs of fine-tuning;
     \item a maximum sequence length of $256$; and
-    \item a batch size of $16$,
+    \item a batch size of $16$.
   \end{enumerate*}
+  \meta{TODO: Discutere delle scelte forzate dal fatto che la memoria ci ha limitato nel sequebnce length e, conseguentemente, il batch size e' stato adattato.}
   The only variation was in the learning rate, where we used $2 \cdot 10^{-5}$ for the encoder and $5 \cdot 10^{-5}$ for the decoder.
   Finally, we used the cross-entropy loss.
 
@@ -412,7 +395,7 @@ During the training phase, we focused on fine-tuning two distinct models: one wa
 
   \caption{\label{table:results}
     Results obtained from the models proposed, with and without fine-tuning, 
-    on ACTI task. Baseline were provided by the ACTI task organizers via Kaggle.
+    on ACTI-A subtask. Baseline were provided by the ACTI task organizers via Kaggle.
   }
 \end{table}
 
@@ -424,7 +407,9 @@ The Kaggle baseline $F_1 scores$ is 0.5107, while the EVALITA winners achieved 0
 Our initial models, without any tuning, achieved $F_1 scores$ of 0.4538 and 0.3189 for the encoder-only 
 and decoder-only configurations, respectively. After fine-tuning, the $F_1 scores$ improved to 0.8211 and 0.7464.
 Comparing the results, we observe that our proposed models significantly 
-outperform the baseline ($+60,77\% $ and $+46,15\%$) but do not yet reach the performance level of the EVALITA winners.
+outperform the baseline ($+60,77\% $ and $+46,15\%$) but do not reach the performance level of the EVALITA winners.
+%
+\meta{discussione sulle confusion matrix}
 
 
 
