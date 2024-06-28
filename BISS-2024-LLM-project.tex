@@ -108,7 +108,9 @@ conspiracy theories in posts coming from Telegram.
 We provide details about the two adopted architectures, the model configuration and the training
 process adopted in our experiments.
 %
-\meta{Briefly summarise the finding of the experiments}
+%\meta{Briefly summarise the finding of the experiments}
+Results show that our proposed models outperform both the baseline provided by the organizers on kaggle and 
+the results of the same models without fine-tuning.
 \end{abstract}
 
 \section{Task description}\label{sec:task-description}
@@ -453,7 +455,7 @@ outperform the baseline ( $+60,77\% $ and $+46,15\% $ ) but do not yet reach the
         \centering
         \includegraphics[width=\textwidth]{figures/encoder-only-confusion-matrix.pdf}
     \end{subfigure}
-    \caption{TBA}
+    \caption{Classification results on the test set for both encoder-only and decoder-only models.}
     \label{fig:confusion-matrix}
 \end{figure}
 
