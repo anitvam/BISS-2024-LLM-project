@@ -367,7 +367,7 @@ this means that the last token of the input sequence contains all the informatio
 \subsection{Training process}\label{sec:training-process}
 During the training phase, we focused on fine-tuning two distinct models: one was encoder-only and the
   other was decoder-only (as described in~\Cref{sec:model-config}).
-  We leveraged the libraries PyTorch and HuggingFace for this process.
+  We leveraged the libraries PyTorch~\cite{NEURIPS2019_9015} and HuggingFace for this process.
   To maintain consistency, we applied the same hyperparameters to both models, which included:
   \begin{enumerate*}[label=(\roman{*})]
     \item $4$ epochs of fine-tuning;
