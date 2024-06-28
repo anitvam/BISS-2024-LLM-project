@@ -407,10 +407,17 @@ The Kaggle baseline $F_1 scores$ is 0.5107, while the EVALITA winners achieved 0
 Our initial models, without any tuning, achieved $F_1 scores$ of 0.4538 and 0.3189 for the encoder-only 
 and decoder-only configurations, respectively. After fine-tuning, the $F_1 scores$ improved to 0.8211 and 0.7464.
 Comparing the results, we observe that our proposed models significantly 
-outperform the baseline ($+60,77\% $ and $+46,15\%$) but do not reach the performance level of the EVALITA winners.
-%
-\meta{discussione sulle confusion matrix}
-
+outperform the baseline ($ +0.3104 $ and $+0.2357$) but do not reach the performance level of the EVALITA winners.
+Figure \ref{fig:confusion-matrix} shows the confusion matrices resulting from 
+the test set classifications for both proposed models. 
+Encoder-only matrix indicates that this model has a good 
+performance in identifying "Conspiratorial" instances but has some difficulties in 
+correctly identifying "Non-Conspiratorial" instances, as evidenced by the number of false positives. 
+Instead, examining the decoder-only matrix, we observe that the number of false positives 
+remains similar to the encoder-only model. However, the number of false negatives increases 
+significantly, surpassing the number of false positives. 
+This increased difficulty in correctly identifying positive instances 
+results in a lower $F_1 score$ for the decoder-only model.
 
 
 % \begin{figure}
