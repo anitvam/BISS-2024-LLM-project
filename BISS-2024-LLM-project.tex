@@ -38,6 +38,8 @@
 
 \usepackage{acronym}
 \usepackage[inline]{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
 % MUST BE THE LAST IMPORT
 \usepackage{cleveref}
 
@@ -359,35 +361,35 @@ During the training phase, we focused on fine-tuning two distinct models: one wa
 
 \section{Result and analysis}\label{sec:results-analysis}
 
+\def\arraystretch{1.2}%
 \begin{table}
   \centering
-\begin{tabular}{ ll  }
+  \begin{tabularx}{\columnwidth}{X r}
 
-  \hline
-   Model & $F_1 score$ \\
-   \hline
-   
-   \hline
-   \multicolumn{2}{|c|}{Baseline} \\
-   \hline
-   Kaggle Baseline  & 0.5107    \\
-   EVALITA Winner &   0.8572  \\
-  
-   \hline
-   \multicolumn{2}{|c|}{Model proposed with no fine-tuning} \\
-   \hline
-   
-   Encoder-Only  &  0.4538    \\
-   Decoder-Only &   0.3189  \\
-  
-  \hline
-   \multicolumn{2}{|c|}{Model proposed after fine-tuning}\\
-   \hline
-   
-   Encoder-Only  &  0.8211    \\
-   Decoder-Only &   0.7464  \\
-   \hline
-  \end{tabular}
+    \toprule
+    \textit{Model} & $F_1 score$ \\
+    \midrule\midrule
+
+    \multicolumn{2}{c}{\textbf{Baseline}} \\
+    \midrule
+    Kaggle Baseline & $0.5107$    \\
+    EVALITA Winner &   $0.8572$  \\
+    
+    \midrule
+    \multicolumn{2}{c}{\textbf{Proposed model with no fine-tuning}} \\
+    \midrule
+    
+    Encoder-Only &  $0.4538$    \\
+    Decoder-Only &   $0.3189$  \\
+    
+    \midrule
+    \multicolumn{2}{c}{\textbf{Proposed model after fine-tuning}}\\
+    \midrule
+    
+    Encoder-Only &  $0.8211$    \\
+    Decoder-Only &   $0.7464$  \\
+    \bottomrule
+  \end{tabularx}
 
   \caption{\label{table:results}
     Results obtained from the models proposed, with and without fine-tuning, 
