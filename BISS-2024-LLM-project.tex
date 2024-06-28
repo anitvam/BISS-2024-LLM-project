@@ -162,10 +162,19 @@ with a \texttt{[CLS]} token, left-padded up to the maximum sequence length, or t
 For tasks that require splitting the input in multiple parts, an additional \texttt{[SEP]} token can be used.
 
 Processed by the hidden encoding layers, each applying self-attention and passing the result to a feed-forward
-neural network, input tokens are transformed into contextual embeddings. Notably, we are only interested in
+neural network, input tokens are transformed into contextual embeddings, as shown in \Cref{fig:encoder-block}. Notably, we are only interested in
 the final hidden state corresponding to the \texttt{[CLS]} token, that contains an aggregate representation of
 the entire input sequence, and can be fed to a linear classifier to obtain the probability distribution of the
 input belonging to one of the classes.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/encoder-block.pdf}
+  \caption{
+    An encoder block, composed by a self-attention layer and a feed forward neural network.
+  }
+  \label{fig:encoder-block}
+\end{figure}
 
 \subsection{Decoder}
 The decoder-based architecture we adopted is very similar to the encoder one, employing a tokenizer, followed
@@ -175,14 +184,22 @@ For the tokenization process, the main differences when compared to the encoder 
 padding direction and the absence of the \texttt{[CLS]} token. In fact, due to the auto-regressive nature
 of decoder-only models, the last token is used to make the prediction, instead of the first.
 
-The input passes through multiple decoder blocks, each composed by a masked self-attention layer and a
-feed-forward neural network. The masking makes it so each token only attends to previous tokens in the
-sequence, maintaining a unidirectional context. The final hidden state, corresponding to the last token in the
-sequence, is fed to the linear layer on top of the stack of decoders. Its output dimension is equal to the number
-of labels of the given task.
+\Cref{fig:decoder-block} shows the input passing through multiple decoder blocks, each composed by a masked 
+self-attention layer and a feed-forward neural network. The masking makes it so each token only attends to previous tokens in the sequence, maintaining a unidirectional context. The final hidden state, corresponding to the last
+token in the sequence, is fed to the linear layer on top of the stack of decoders. Its output dimension is equal to 
+the number of labels of the given task.
 %
 Alternatively, and less commonly, a special token's embedding or an aggregation of all token embeddings can be
 used as input for the classifier.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/decoder-block.pdf}
+  \caption{
+    A decoder block with its masked self-attention layer and feed forward neural network.
+  }
+  \label{fig:decoder-block}
+\end{figure}
 
 \section{Experimental setup}\label{sec:experimental-setup}
 
