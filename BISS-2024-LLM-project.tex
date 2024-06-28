@@ -357,7 +357,55 @@ During the training phase, we focused on fine-tuning two distinct models: one wa
 
 
 \section{Result and analysis}\label{sec:results-analysis}
-@ale
+
+\begin{table}
+  \centering
+\begin{tabular}{ ll  }
+
+  \hline
+   Model & $F_1 score$ \\
+   \hline
+   
+   \hline
+   \multicolumn{2}{|c|}{Baseline} \\
+   \hline
+   Kaggle Baseline  & 0.5107    \\
+   EVALITA Winner &   0.8572  \\
+  
+   \hline
+   \multicolumn{2}{|c|}{Model proposed with no fine-tuning} \\
+   \hline
+   
+   Encoder-Only  &  0.4538    \\
+   Decoder-Only &   0.3189  \\
+  
+  \hline
+   \multicolumn{2}{|c|}{Model proposed after fine-tuning}\\
+   \hline
+   
+   Encoder-Only  &  0.8211    \\
+   Decoder-Only &   0.7464  \\
+   \hline
+  \end{tabular}
+
+  \caption{\label{table:results}
+    Results obtained from the models proposed, with and without fine-tuning, 
+    on ACTI task. Baseline were provided by the ACTI task organizers via Kaggle.
+  }
+\end{table}
+
+We evaluated the performance of our classification models using the $F_1 score$. 
+Table \ref{table:results} displays the performance of our proposed model, 
+along with additional scores for comparison to provide further insights into the results. 
+The $F_1 scores$ were computed on the labeled test set provided by the organizers of the ACTI task.
+The Kaggle baseline $F_1 scores$ is 0.5107, while the EVALITA winners achieved 0.8572. 
+Our initial models, without any tuning, achieved $F_1 scores$ of 0.4538 and 0.3189 for the encoder-only 
+and decoder-only configurations, respectively. After fine-tuning, the $F_1 scores$ improved to 0.8211 and 0.7464.
+Comparing the results, we observe that our proposed models significantly 
+outperform the baseline ( $+60,77\% $ and $+46,15\% $ ) but do not yet reach the performance level of the EVALITA winners.
+
+
+
 \begin{figure}
   \centering
   \includegraphics[width=\columnwidth]{figures/decoder-only-confusion-matrix.pdf}
