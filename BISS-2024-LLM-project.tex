@@ -111,8 +111,6 @@ process adopted in our experiments.
 %\meta{Briefly summarise the finding of the experiments}
 Results show that our proposed models outperform both the baseline provided by the organizers on kaggle and 
 the results of the same models without fine-tuning.
-
-\meta{ACTI-A task / ACTI task / subtask}
 \end{abstract}
 
 \section{Task description}\label{sec:task-description}
@@ -144,7 +142,7 @@ The dataset for \ac{acti}-A is in CSV format and contains three columns, namely:
 The dataset is split into two separate CSV files: one, meant for the training process, lists
 1842 records, while the other includes 460 posts for testing purposes.
 %
-Notably, since the task was part of a challenge, the second dataset did not contain the
+Notably, since the subtask was part of a challenge, the second dataset did not contain the
 \textbf{conspiratorial} column by default.
 %
 Therefore, the test set was initially labelled by computing the encoding of each sentence using an auxiliary LLM,
@@ -190,7 +188,7 @@ The decoder-based architecture we adopted is very similar to the encoder one, em
 by the decoder model, with a classification layer on top.
 
 For the tokenization process, the main difference when compared to the encoder solution is the absence of the \texttt{[CLS]} token. 
-In fact, due to the auto-regressive nature
+In fact, due to the autoregressive nature
 of decoder-only models, the last token is used to make the prediction, instead of the first.
 
 \Cref{fig:decoder-block} shows the input passing through multiple decoder blocks, each composed by a masked 
@@ -243,13 +241,13 @@ since we are limited in the number of token each model can accept.
 \Cref{fig:words-distribution} shows the distribution of the posts' length divided by training and test set.
 %
 The two upper charts provide the distribution on the raw post of both the dataset,
-while the two lower charts describe the distribution after the cleanup step (that we will discuss in the next paragraph).
+while the two lower charts describe the distribution after the clean-up step (that we will discuss in the next paragraph).
 %
 As can be observed,
 the majority of the posts are concentrated in the range $0-500$ words,
 meaning that the most of the dataset will not be truncated when input to the model.
 %
-The posts' cleanup process do not significantly impact the length distribution of the posts in the datasets.
+The posts' clean-up process do not significantly impact the length distribution of the posts in the datasets.
 
 \paragraph{Text cleaning}
 To remove noise from the input data,
@@ -303,11 +301,11 @@ To address the chosen challenge, we added to this model a final layer for classi
 which returns a value for each class specified,
 in our case two classes, for identifying if a text is conspiratorial or not.
 
-Before training the model on our task we performed preprocessing, as described in \Cref{sec:preprocessing},
+Before training the model on our subtask we performed preprocessing, as described in \Cref{sec:preprocessing},
 and then tokenization (\Cref{fig:preprocessing-and-tokenization-encoder}).
 %
 Concerning tokenization, \texttt{CamembertTokenizerFast} is adopted,
-it normalizes strings input both regarding delimeters of the text,
+it normalizes strings input both regarding delimiters of the text,
 but also adds a left-side padding where the input is smaller than the maximum sequence length,
 that we fixed at $ 256 $ characters.
 %
@@ -316,7 +314,7 @@ that we fixed at $ 256 $ characters.
   \includegraphics[width=\linewidth]{figures/encoder.pdf}
   \caption{
     Input manipulation before passing it to the encoder LLM model.
-    The image exemplifies the manipulation output obtained after the cleanup process and the application of the tokenization function.
+    The image exemplifies the manipulation output obtained after the clean-up process and the application of the tokenization function.
   }
   \label{fig:preprocessing-and-tokenization-encoder}
 \end{figure}
@@ -341,7 +339,7 @@ this means that the last token of the input sequence contains all the informatio
   \includegraphics[width=\linewidth]{figures/decoder.pdf}
   \caption{
     Input manipulation before passing it to the decoder LLM model.
-    The image exemplifies the manipulation output obtained after the cleanup process and the application of the tokenization function.
+    The image exemplifies the manipulation output obtained after the clean-up process and the application of the tokenization function.
   }
   \label{fig:preprocessing-and-tokenization-decoder}
 \end{figure}
@@ -401,7 +399,7 @@ During the training phase, we focused on fine-tuning two distinct models: one wa
 We evaluated the performance of our classification models using the $F_1 score$. 
 Table \ref{table:results} displays the performance of our proposed model, 
 along with additional scores for comparison to provide further insights into the results. 
-The $F_1 scores$ were computed on the labeled test set provided by the organizers of the ACTI task.
+The $F_1 scores$ were computed on the labelled test set provided by the organizers of the ACTI task.
 The Kaggle baseline $F_1 scores$ is 0.5107, while the EVALITA winners achieved 0.8572. 
 Our initial models, without any tuning, achieved $F_1 scores$ of 0.4538 and 0.3189 for the encoder-only 
 and decoder-only configurations, respectively. After fine-tuning, the $F_1 scores$ improved to 0.8211 and 0.7464.
