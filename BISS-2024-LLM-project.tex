@@ -40,6 +40,10 @@
 \usepackage[inline]{enumitem}
 \usepackage{booktabs}
 \usepackage{tabularx}
+
+% To place figures at the bottom of pages
+\usepackage{stfloats}
+
 % MUST BE THE LAST IMPORT
 \usepackage{cleveref}
 
@@ -220,6 +224,28 @@ used as input for the classifier.
   \label{fig:decoder-block}
 \end{figure}
 
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth]{figures/class_distribution.pdf}
+  \caption{
+    Class distribution between the \emph{training set} and the \emph{test set}.
+  }
+  \label{fig:class-frequency}
+\end{figure*}
+
+\begin{figure*}[bp]
+  \centering
+  \includegraphics[width=\textwidth]{figures/comment_length_distribution.pdf}
+  \caption{
+    Comment length distribution for both the training dataset (on the left) and test dataset
+    (on the right).
+    %
+    The upper charts refer to the raw content of posts, coming from the original dataset;
+    in the lower charts, our cleanup preprocessing has been applied to the content.
+  }
+  \label{fig:words-distribution}
+\end{figure*}
+
 \section{Experimental setup}\label{sec:experimental-setup}
 
 \subsection{Preprocessing}\label{sec:preprocessing}
@@ -276,29 +302,6 @@ we conducted the following operations:
 Then,
 the dataset is updated with the cleaned version of the posts,
 preserving the same file structure.
-
-
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth]{figures/class_distribution.pdf}
-  \caption{
-    Class distribution between the \emph{training set} and the \emph{test set}.
-  }
-  \label{fig:class-frequency}
-\end{figure*}
-
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth]{figures/comment_length_distribution.pdf}
-  \caption{
-    Comment length distribution for both the training dataset (on the left) and test dataset
-    (on the right).
-    %
-    The upper charts refer to the raw content of posts, coming from the original dataset;
-    in the lower charts, our cleanup preprocessing has been applied to the content.
-  }
-  \label{fig:words-distribution}
-\end{figure*}
 
 \subsection{Model configuration}\label{sec:model-config}
 While solving ACTI-A subtask, we also compared performances of two different Transformer-based architectures,
