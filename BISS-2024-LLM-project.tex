@@ -356,10 +356,9 @@ During the training phase, we focused on fine-tuning two distinct models: one wa
     \item a maximum sequence length of $256$; and
     \item a batch size of $16$.
   \end{enumerate*}
-  \meta{TODO: Discutere delle scelte forzate dal fatto che la memoria ci ha limitato nel sequebnce length e, conseguentemente, il batch size e' stato adattato.}
   The only variation was in the learning rate, where we used $2 \cdot 10^{-5}$ for the encoder and $5 \cdot 10^{-5}$ for the decoder.
+  Notably, we chose those values of maximum sequence length and batch size due to the memory constraints of the available GPUs.
   Finally, we used the cross-entropy loss.
-
 
 \section{Result and analysis}\label{sec:results-analysis}
 
