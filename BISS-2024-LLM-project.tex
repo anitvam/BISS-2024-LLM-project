@@ -157,8 +157,20 @@ missing labels upon our request.
 
 \section{Related Work}\label{sec:related-work}
 
-\meta{citare gli altri lavori che sono stati fatti per il task ACTI-A}\cite{russo2023actievalita2023overview} 
-\footnote{\url{https://ceur-ws.org/Vol-3473/}}
+The \ac{acti} task \cite{russo2023actievalita2023overview} was part of the EVALITA 2023 initiative
+\cite{lai2023evalita} \footnote{\url{https://ceur-ws.org/Vol-3473/}}. EVALITA is a periodic evaluation campaign
+of Natural Language Processing (NLP) and speech tools for the Italian language, and the year 2023 saw its 8th
+edition, with its first one dating back to 2007.
+
+Eight teams tacked the \ac{acti}-a subtask in EVALITA 2023, with F1-scores ranging from $0.78$ to $0.85$. While
+the the two best-performing teams, namely UPB \cite{paraschiv2023upbactidetecting} and extremITA
+\cite{hromei2023extremita}, submitted a \ac{llm}-based solution, other teams approached the problem with methods
+based on transformers and ensembles, but still managed to pass the $0.80$ accuracy mark. In particular,
+\cite{giobergia2023acti} tried both a single-task and a multi-task approach, testing three fine-tuned models:
+Italian ELECTRA \cite{9514855}, BART-IT \cite{fi15010015}, and Italian BERT \cite{stefan-it-italian-bertelectra}.
+They used these encoder-based models to compute embeddings of the given input, then fed the result to a classifier
+for labelling. \cite{vitali2023acti} adopted a similar approach, but also used data augmentation techniques on the
+data sets, obtaining relevant improvements in subtask A specifically.
 
 \section{Architecture overview}\label{sec:architecture-overview}
 To tackle the \ac{acti}-A subtask, we explored two alternative architectures: an encoder-based one, and
